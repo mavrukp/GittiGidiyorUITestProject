@@ -32,6 +32,39 @@ public class FileReaderWriter {
         }
     }
 
+    public String readFromFile() {
+
+        String filePath = createFilePath(System.getProperty("user.dir")+System.getProperty("file.separator")+"Price");
+
+        try {
+            /*InputStream inputStream = new FileInputStream(filePath + System.getProperty("file.separator") + "product.text");
+            Reader inputStreamReader = new InputStreamReader(inputStream);
+
+            int data = inputStreamReader.read();
+            String readText = null;
+            while (data != -1) {
+                System.out.print((char) data);
+                readText.concat((String) data);
+                data = inputStreamReader.read();
+            }
+
+            inputStreamReader.close();
+            return (char) data;*/
+
+            BufferedReader br = new BufferedReader(new FileReader(filePath + System.getProperty("file.separator") + "product.text"));
+
+            String readLineText;
+            while ((readLineText = br.readLine()) != null){
+                System.out.println(readLineText);
+                return readLineText;
+            }
+
+        } catch (Exception e) {
+            logger.info("Read from file exception");
+        }
+        return null;
+    }
+
     public String createFilePath (String directory) {
         File fileDirectory = new File(directory);
         if (!fileDirectory.exists()) {

@@ -28,7 +28,8 @@ public class HomePage extends WebDriverManager {
     }
 
     public List<WebElement> productListItems(){
-        return  remoteWebdriver.get().findElements(By.cssSelector("ul li.sc-1nx8ums-0"));
+        //return  remoteWebdriver.get().findElements(By.cssSelector("ul li.sc-1nx8ums-0"));
+        return  remoteWebdriver.get().findElements(By.xpath("//ul//li[contains(@class,'sc-1nx8ums')]"));
     }
 
     public void selectProduct(WebElement product){

@@ -5,6 +5,7 @@ import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pageObjects.BasketPage;
 import pageObjects.HomePage;
 import pageObjects.ProductPage;
 
@@ -49,9 +50,19 @@ public class SearchTest {
         ProductPage productPage = new ProductPage();
         int indx = new Random().nextInt(homePage.productListItems().size()-1);
         waitElement.implicitlyWait(30);
+        try {
+            Thread.sleep(15000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         waitElement.waitElementToVisible(homePage.productListItems().get(indx));
         homePage.selectProduct(homePage.productListItems().get(indx));
         waitElement.implicitlyWait(30);
+        try {
+            Thread.sleep(15000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         waitElement.waitElementToVisible(productPage.productName());
 
         String productName = productPage.productName().getText();
@@ -66,6 +77,25 @@ public class SearchTest {
     public void addRandomProductToBasket() {
         WaitElement waitElement = new WaitElement();
         ProductPage productPage = new ProductPage();
+        BasketPage basketPage = new BasketPage();
+
+        waitElement.waitElementToBeClickable(productPage.addToBasketButton());
+        try {
+            Thread.sleep(15000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        productPage.clickAddToBasketButton(productPage.addToBasketButton());
+
+        productPage.clickBasketButton();
+
+        FileReaderWriter fileReaderWriter = new FileReaderWriter();
+
+        String productBasketPrice = basketPage.productBasketPrice().getText();
+        String readLineFromFile = fileReaderWriter.readFromFile();
+
+        assertTrue(readLineFromFile.contains(productBasketPrice));
 
     }
 
