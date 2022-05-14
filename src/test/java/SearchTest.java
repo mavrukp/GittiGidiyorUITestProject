@@ -1,30 +1,34 @@
 import common.FileReaderWriter;
 import common.WaitElement;
+import common.WebDriverManager;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pageObjects.BasketPage;
 import pageObjects.HomePage;
 import pageObjects.ProductPage;
-
-import java.text.Normalizer;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class SearchTest {
+public class SearchTest extends WebDriverManager{
 
     final static Logger logger = LoggerFactory.getLogger(SearchTest.class);
     private static HomePage homePage;
 
+
     @BeforeAll
     public static void setDriver() {
         logger.info("Starting test Thread Number Is " + Thread.currentThread().getId());
+        if (System.getProperty("webdriver").equals("chrome")){
+            chromeWebdriverSet();
+        }else if(System.getProperty("webdriver").equals("remote")) {
+            remoteChromeWebdriverSet();
+        }
 
         homePage = new HomePage();
-
     }
 
     @Test
@@ -41,8 +45,6 @@ public class SearchTest {
 
         homePage.searchInputBox().sendKeys("Bilgisayar");
         homePage.searchFindButton().click();
-
-        Thread.sleep(5000);
 
         homePage.scrollToEndOfPage();
         waitElement.waitElementToBeClickable(homePage.pageListItems(1));
@@ -62,6 +64,7 @@ public class SearchTest {
 
         int indx = new Random().nextInt(homePage.productListItems().size()-1);
 
+        waitElement.waitElementToBeClickable(homePage.productListItems().get(indx));
 
             Thread.sleep(5000);
 
@@ -97,6 +100,7 @@ public class SearchTest {
         productPage.clickBasketButton();
 
         Thread.sleep(5000);
+        waitElement.waitElementToVisible(basketPage.productBasketPrice());
 
         FileReaderWriter fileReaderWriter = new FileReaderWriter();
 
@@ -132,18 +136,18 @@ public class SearchTest {
 
         basketPage.clickDeleteProductButton(basketPage.deleteButton());
 
-        Thread.sleep(5000);
+        Thread.sleep(2000);
 
-        String asciiInfoMsgElement = Normalizer.normalize(basketPage.emptyBasketInfoMessage().getText(), Normalizer.Form.NFD)
-                .replaceAll("[^\\p{ASCII}]", "");
+/*        String asciiInfoMsgElement = Normalizer.normalize(basketPage.emptyBasketInfoMessage().getText(), Normalizer.Form.NFD)
+                .replaceAll("[^\\p{ASCII}]", "");*/
 
-       // assertTrue(basketPage.removedFromBasketMsg().isDisplayed());
+        assertTrue(basketPage.removedFromBasketMsg().isDisplayed());
 
     }
 
     @AfterAll
     public static void driverQuit(){
-        homePage.chromeWebdriverQuit();
+       chromeWebdriverQuit();
     }
 
 }

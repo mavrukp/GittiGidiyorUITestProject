@@ -41,6 +41,11 @@ public class ProductPage extends WebDriverManager {
         mouseOverProdct.perform();
     }
 
+    public WebElement basketButton(){
+        return  remoteWebdriver.get().findElement(By.xpath("//a[@class='header-cart-hidden-link']"));
+
+    }
+
     public void clickBasketButton(){
         WebElement button =  remoteWebdriver.get().findElement(By.xpath("//a[@class='header-cart-hidden-link']"));
         //return  remoteWebdriver.get().findElement(By.linkText("https://www.gittigidiyor.com/sepetim"));

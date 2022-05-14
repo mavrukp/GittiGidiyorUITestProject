@@ -11,15 +11,19 @@ import java.util.List;
 public class HomePage extends WebDriverManager {
 
     public HomePage(){
-        chromeWebdriverSet();
     }
 
     public WebElement searchInputBox(){
-        return  remoteWebdriver.get().findElement(By.cssSelector("input[placeholder='Keşfetmeye Bak']"));
+        return remoteWebdriver.get().findElement(By.cssSelector("input[placeholder='Keşfetmeye Bak']"));
+
+/*        JavascriptExecutor js = (JavascriptExecutor)remoteWebdriver.get();
+        js.executeScript("arguments[0].value='"+ text + "';", inputBox);*/
     }
 
     public WebElement searchFindButton(){
-        return  remoteWebdriver.get().findElement(By.cssSelector("button[type='submit']"));
+        return remoteWebdriver.get().findElement(By.cssSelector("button[type='submit']"));
+/*        JavascriptExecutor js = (JavascriptExecutor)remoteWebdriver.get();
+        js.executeScript("arguments[0].click();", button);*/
     }
 
     public WebElement pageListItems(int indx){
@@ -41,6 +45,12 @@ public class HomePage extends WebDriverManager {
                 .moveToElement(product)
                 .click().build();
         mouseOverProdct.perform();
+    }
+
+    public void scrollToProduct(WebElement product){
+        Actions a = new Actions(remoteWebdriver.get());
+        a.moveToElement(product);
+        a.perform();
     }
 
     public void scrollToEndOfPage() {
