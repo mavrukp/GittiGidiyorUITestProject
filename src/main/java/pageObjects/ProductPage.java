@@ -9,7 +9,6 @@ import org.openqa.selenium.interactions.Actions;
 
 public class ProductPage extends WebDriverManager {
     public WebElement productName(){
-        //return  remoteWebdriver.get().findElement(By.cssSelector("#sp-title"));
         return  remoteWebdriver.get().findElement(By.xpath("//*[@id='sp-title']"));
     }
 
@@ -18,7 +17,6 @@ public class ProductPage extends WebDriverManager {
     }
 
     public WebElement addToBasketButton(){
-     //return  remoteWebdriver.get().findElement(By.cssSelector("#add-to-basket"));
         return  remoteWebdriver.get().findElement(By.xpath("//*[@id='add-to-basket']"));
 
     }
@@ -29,9 +27,6 @@ public class ProductPage extends WebDriverManager {
                 .moveToElement(button)
                 .click().build();
         mouseOverProdct.perform();
-
-/*        JavascriptExecutor js = (JavascriptExecutor)remoteWebdriver.get();
-        js.executeScript("arguments[0].click();", button);*/
     }
 
     public void mouseHoverBasketButton(WebElement button){
@@ -48,7 +43,6 @@ public class ProductPage extends WebDriverManager {
 
     public void clickBasketButton(){
         WebElement button =  remoteWebdriver.get().findElement(By.xpath("//a[@class='header-cart-hidden-link']"));
-        //return  remoteWebdriver.get().findElement(By.linkText("https://www.gittigidiyor.com/sepetim"));
         JavascriptExecutor js = (JavascriptExecutor)remoteWebdriver.get();
         js.executeScript("arguments[0].click();", button);
 

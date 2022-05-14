@@ -15,15 +15,10 @@ public class HomePage extends WebDriverManager {
 
     public WebElement searchInputBox(){
         return remoteWebdriver.get().findElement(By.cssSelector("input[placeholder='Keşfetmeye Bak']"));
-
-/*        JavascriptExecutor js = (JavascriptExecutor)remoteWebdriver.get();
-        js.executeScript("arguments[0].value='"+ text + "';", inputBox);*/
     }
 
     public WebElement searchFindButton(){
         return remoteWebdriver.get().findElement(By.cssSelector("button[type='submit']"));
-/*        JavascriptExecutor js = (JavascriptExecutor)remoteWebdriver.get();
-        js.executeScript("arguments[0].click();", button);*/
     }
 
     public WebElement pageListItems(int indx){
@@ -35,7 +30,6 @@ public class HomePage extends WebDriverManager {
     }
 
     public List<WebElement> productListItems(){
-        //return  remoteWebdriver.get().findElements(By.cssSelector("ul li.sc-1nx8ums-0"));
         return  remoteWebdriver.get().findElements(By.xpath("//ul//li[contains(@class,'sc-1nx8ums')]"));
     }
 
