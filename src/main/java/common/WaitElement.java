@@ -44,6 +44,7 @@ public class WaitElement extends WebDriverManager{
             }
         };
         try {
+            //WebDriverWait wait = new WebDriverWait(remoteWebdriver.get(), Duration.ofSeconds(timeOutInSeconds));
             WebDriverWait wait = new WebDriverWait(remoteWebdriver.get(), Duration.ofSeconds(timeOutInSeconds));
             wait.until(expectation);
         } catch (Throwable error) {
@@ -56,6 +57,6 @@ public class WaitElement extends WebDriverManager{
     }
 
     public void implicitlyWait(int duration){
-        remoteWebdriver.get().manage().timeouts().implicitlyWait(Duration.ofSeconds(duration));
+       remoteWebdriver.get().manage().timeouts().implicitlyWait(Duration.ofSeconds(duration));
     }
 }

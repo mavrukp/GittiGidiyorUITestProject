@@ -4,8 +4,12 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
+
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
+
 public class WebDriverManager {
-    public static ThreadLocal<RemoteWebDriver> remoteWebdriver = new ThreadLocal<RemoteWebDriver>();
+    public static ThreadLocal<RemoteWebDriver> remoteWebdriver= new ThreadLocal<RemoteWebDriver>();
 
     public void chromeWebdriverSet(){
         String fileSeperator = System.getProperty("file.separator");
@@ -22,6 +26,7 @@ public class WebDriverManager {
         remoteWebdriver.set(new ChromeDriver(chromeOptions));
         remoteWebdriver.get().manage().deleteAllCookies();
         remoteWebdriver.get().manage().window().maximize();
+        //remoteWebdrive.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(60));
     }
 
     public void chromeWebdriverQuit(){

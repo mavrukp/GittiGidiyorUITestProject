@@ -6,7 +6,6 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
-
 import java.util.List;
 
 public class HomePage extends WebDriverManager {
@@ -25,6 +24,10 @@ public class HomePage extends WebDriverManager {
 
     public WebElement pageListItems(int indx){
         return  remoteWebdriver.get().findElements(By.cssSelector("li[data-testid='pagination-list-item']")).get(indx);
+    }
+
+    public WebElement cookieWarnCloseButton(){
+        return  remoteWebdriver.get().findElement(By.xpath("//span[text()='Kapat']"));
     }
 
     public List<WebElement> productListItems(){
