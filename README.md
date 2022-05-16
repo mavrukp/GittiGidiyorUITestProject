@@ -15,3 +15,5 @@ mvn -Dwebdriver=chrome install
 
 if test would like to be run with remotewebdriver through selenium grid, command at below should be run
 mvn -Dwebdriver=remote install
+
+PS 3 : After project run successfully, the price is obtained from web page is saved in "product.txt" file. I left this file in place to be an example, it can be deleted before test execution. 
