@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import pageObjects.BasketPage;
 import pageObjects.HomePage;
 import pageObjects.ProductPage;
+
+import java.util.NoSuchElementException;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -39,18 +41,24 @@ public class SearchTest extends WebDriverManager{
 
         Thread.sleep(5000);
 
-        if (homePage.cookieWarnCloseButton().isDisplayed()){
-            homePage.cookieWarnCloseButton().click();
+        try{
+            if (homePage.cookieWarnCloseButton().isDisplayed()){
+                homePage.cookieWarnCloseButton().click();
+            }
+        }catch (NoSuchElementException e){
+            logger.error("No such element exception on Home Page for cookie warning");
+        }finally {
+            Thread.sleep(10000);
+
+            homePage.searchInputBox().sendKeys("Bilgisayar");
+            homePage.searchFindButton().click();
+
+            homePage.scrollToEndOfPage();
+            waitElement.waitElementToBeClickable(homePage.pageListItems(1));
+            homePage.pageListItems(1).click();
+
+            assertTrue(homePage.getPageURLText().contains("sf=2"));
         }
-
-        homePage.searchInputBox().sendKeys("Bilgisayar");
-        homePage.searchFindButton().click();
-
-        homePage.scrollToEndOfPage();
-        waitElement.waitElementToBeClickable(homePage.pageListItems(1));
-        homePage.pageListItems(1).click();
-
-        assertTrue(homePage.getPageURLText().contains("sf=2"));
 
     }
 

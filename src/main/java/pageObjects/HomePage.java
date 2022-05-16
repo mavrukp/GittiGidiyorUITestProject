@@ -14,7 +14,7 @@ public class HomePage extends WebDriverManager {
     }
 
     public WebElement searchInputBox(){
-        return remoteWebdriver.get().findElement(By.cssSelector("input[placeholder='Keşfetmeye Bak']"));
+        return remoteWebdriver.get().findElement(By.xpath("//input[starts-with(@class,'sc-4995aq-0')]"));
     }
 
     public WebElement searchFindButton(){

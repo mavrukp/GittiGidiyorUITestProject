@@ -15,16 +15,7 @@ public class WebDriverManager {
         System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") +
                 fileSeperator + "src" + fileSeperator + "main" + fileSeperator + "resources" + fileSeperator +
                 "chromedriver.exe");
-        ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.addArguments("--headless");
-        chromeOptions.addArguments("--no-sandbox");
-        chromeOptions.addArguments("--disable-dev-shm-usage");
-        chromeOptions.addArguments("disable-infobars");
-        chromeOptions.addArguments("--disable-popup-blocking");
-        chromeOptions.addArguments("--disable-notifications");
-        chromeOptions.addArguments("window-size=1366,768");
-        chromeOptions.setPageLoadStrategy(PageLoadStrategy.NORMAL);
-        //ChromeOptions chromeOptions = setChromeOptions();
+        ChromeOptions chromeOptions = setChromeOptions();
         remoteWebdriver.set(new ChromeDriver(chromeOptions));
         remoteWebdriver.get().manage().deleteAllCookies();
         //remoteWebdrive.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(60));
@@ -32,16 +23,7 @@ public class WebDriverManager {
 
 
     public static void remoteChromeWebdriverSet() {
-        ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.addArguments("--headless");
-        chromeOptions.addArguments("--no-sandbox");
-        chromeOptions.addArguments("--disable-dev-shm-usage");
-        chromeOptions.addArguments("disable-infobars");
-        chromeOptions.addArguments("--disable-popup-blocking");
-        chromeOptions.addArguments("--disable-notifications");
-        chromeOptions.addArguments("window-size=1366,768");
-        chromeOptions.setPageLoadStrategy(PageLoadStrategy.NORMAL);
-        //ChromeOptions chromeOptions = setChromeOptions();
+        ChromeOptions chromeOptions = setChromeOptions();
         String nodeURL = "http://localhost:4444/wd/hub";
         try {
             remoteWebdriver.set(new RemoteWebDriver(new URL(nodeURL), chromeOptions));
@@ -49,7 +31,6 @@ public class WebDriverManager {
             e.printStackTrace();
         }
         remoteWebdriver.get().manage().deleteAllCookies();
-        remoteWebdriver.get().manage().window().maximize();
     }
 
     private static ChromeOptions setChromeOptions(){
