@@ -6,35 +6,41 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.remote.RemoteWebDriver;
+
 import java.util.List;
 
-public class HomePage extends WebDriverManager {
+public class HomePage {
 
-    public HomePage(){
+    private RemoteWebDriver driver;
+
+    public HomePage(RemoteWebDriver remoteWebdriver){
+        driver = remoteWebdriver;
     }
 
     public WebElement searchInputBox(){
-        return remoteWebdriver.get().findElement(By.xpath("//input[starts-with(@class,'sc-4995aq-0')]"));
+        return driver.findElement(By.xpath("//input[starts-with(@class,'sc-4995aq-0')]"));
     }
 
     public WebElement searchFindButton(){
-        return remoteWebdriver.get().findElement(By.cssSelector("button[type='submit']"));
+        return  driver.findElement(By.cssSelector("button[type='submit']"));
     }
 
     public WebElement pageListItems(int indx){
-        return  remoteWebdriver.get().findElements(By.cssSelector("li[data-testid='pagination-list-item']")).get(indx);
+        return  driver.findElements(By.cssSelector("li[data-testid='pagination-list-item']")).get(indx);
     }
 
     public WebElement cookieWarnCloseButton(){
-        return  remoteWebdriver.get().findElement(By.xpath("//span[text()='Kapat']"));
+        return  driver.findElement(By.xpath("//span[text()='Kapat']"));
     }
 
     public List<WebElement> productListItems(){
-        return  remoteWebdriver.get().findElements(By.xpath("//ul//li[contains(@class,'sc-1nx8ums')]"));
+        //return  driver.findElements(By.cssSelector("ul li.sc-1nx8ums-0"));
+        return  driver.findElements(By.xpath("//ul//li[contains(@class,'sc-1nx8ums')]"));
     }
 
     public void selectProduct(WebElement product){
-        Actions builder = new Actions(remoteWebdriver.get());
+        Actions builder = new Actions(driver);
         Action mouseOverProdct = builder
                 .moveToElement(product)
                 .click().build();
@@ -42,21 +48,21 @@ public class HomePage extends WebDriverManager {
     }
 
     public void scrollToProduct(WebElement product){
-        Actions a = new Actions(remoteWebdriver.get());
+        Actions a = new Actions(driver);
         a.moveToElement(product);
         a.perform();
     }
 
     public void scrollToEndOfPage() {
-        ((JavascriptExecutor) remoteWebdriver.get())
+        ((JavascriptExecutor) driver)
                 .executeScript("window.scrollTo(0, document.body.scrollHeight)");
     }
 
     public void navigateToMainURL(){
-        remoteWebdriver.get().get("https://www.gittigidiyor.com/");
+        driver.get("https://www.gittigidiyor.com/");
     }
 
     public String getPageURLText(){
-        return remoteWebdriver.get().getCurrentUrl();
+        return driver.getCurrentUrl();
     }
 }

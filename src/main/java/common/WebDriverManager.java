@@ -7,33 +7,36 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class WebDriverManager {
-    public static ThreadLocal<RemoteWebDriver> remoteWebdriver= new ThreadLocal<RemoteWebDriver>();
 
-    public static void chromeWebdriverSet(){
+public class WebDriverManager {
+    public RemoteWebDriver remoteWebdriver;
+
+    public  void chromeWebdriverSet(){
         String fileSeperator = System.getProperty("file.separator");
         System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") +
                 fileSeperator + "src" + fileSeperator + "main" + fileSeperator + "resources" + fileSeperator +
                 "chromedriver.exe");
         ChromeOptions chromeOptions = setChromeOptions();
-        remoteWebdriver.set(new ChromeDriver(chromeOptions));
-        remoteWebdriver.get().manage().deleteAllCookies();
+        remoteWebdriver = new ChromeDriver(chromeOptions);
+        //remoteWebdriver.set(new ChromeDriver(chromeOptions));
+        remoteWebdriver.manage().deleteAllCookies();
         //remoteWebdrive.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(60));
     }
 
 
-    public static void remoteChromeWebdriverSet() {
+    public  void remoteChromeWebdriverSet() {
         ChromeOptions chromeOptions = setChromeOptions();
         String nodeURL = "http://localhost:4444/wd/hub";
         try {
-            remoteWebdriver.set(new RemoteWebDriver(new URL(nodeURL), chromeOptions));
+            remoteWebdriver = new RemoteWebDriver(new URL(nodeURL), chromeOptions);
+            //remoteWebdriver.set(new RemoteWebDriver(new URL(nodeURL), chromeOptions));
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        remoteWebdriver.get().manage().deleteAllCookies();
+        remoteWebdriver.manage().deleteAllCookies();
     }
 
-    private static ChromeOptions setChromeOptions(){
+    private  ChromeOptions setChromeOptions(){
         ChromeOptions chromeOptions = new ChromeOptions();
         chromeOptions.addArguments("--headless");
         chromeOptions.addArguments("--no-sandbox");
@@ -42,12 +45,13 @@ public class WebDriverManager {
         chromeOptions.addArguments("--disable-popup-blocking");
         chromeOptions.addArguments("--disable-notifications");
         chromeOptions.addArguments("window-size=1366,768");
+        //chromeOptions.addArguments("--start-maximized");
         chromeOptions.setPageLoadStrategy(PageLoadStrategy.NORMAL);
         return chromeOptions;
     }
 
-    public static void chromeWebdriverQuit(){
-        remoteWebdriver.get().quit();
+    public void chromeWebdriverQuit(){
+        remoteWebdriver.quit();
 
     }
 }

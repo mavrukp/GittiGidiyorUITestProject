@@ -8,6 +8,7 @@ import pageObjects.BasketPage;
 import pageObjects.HomePage;
 import pageObjects.ProductPage;
 
+import java.text.Normalizer;
 import java.util.NoSuchElementException;
 import java.util.Random;
 
@@ -15,14 +16,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class SearchTest extends WebDriverManager{
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+public class SearchTest extends WebDriverManager {
+
 
     final static Logger logger = LoggerFactory.getLogger(SearchTest.class);
     private static HomePage homePage;
 
 
     @BeforeAll
-    public static void setDriver() {
+    public void setDriver() {
         logger.info("Starting test Thread Number Is " + Thread.currentThread().getId());
         if (System.getProperty("webdriver").equals("chrome")){
             chromeWebdriverSet();
@@ -30,13 +33,16 @@ public class SearchTest extends WebDriverManager{
             remoteChromeWebdriverSet();
         }
 
-        homePage = new HomePage();
+        homePage = new HomePage(remoteWebdriver);
+        logger.info("remoteWebdriver getSessionId " + remoteWebdriver.getSessionId());
+
     }
 
     @Test
     @Order(1)
     public void searchTest() throws InterruptedException {
-        WaitElement waitElement = new WaitElement();
+        logger.info("searchTest  start => " + Thread.currentThread().getName());
+        WaitElement waitElement = new WaitElement(remoteWebdriver);
         homePage.navigateToMainURL();
 
         Thread.sleep(5000);
@@ -60,13 +66,16 @@ public class SearchTest extends WebDriverManager{
             assertTrue(homePage.getPageURLText().contains("sf=2"));
         }
 
+        logger.info("searchTest  end => " + Thread.currentThread().getName());
+
     }
 
     @Test
     @Order(2)
     public void selectRandomProduct() throws InterruptedException {
-        WaitElement waitElement = new WaitElement();
-        ProductPage productPage = new ProductPage();
+        logger.info("selectRandomProduct  start => " + Thread.currentThread().getName());
+        WaitElement waitElement = new WaitElement(remoteWebdriver);
+        ProductPage productPage = new ProductPage(remoteWebdriver);
 
         Thread.sleep(5000);
 
@@ -88,14 +97,16 @@ public class SearchTest extends WebDriverManager{
 
         FileReaderWriter fileReaderWriter = new FileReaderWriter();
         fileReaderWriter.writeTextToFile(productName + " " + productPrice);
+        logger.info("selectRandomProduct  end => " + Thread.currentThread().getName());
     }
 
     @Test
     @Order(3)
     public void addRandomProductToBasket() throws InterruptedException {
-        WaitElement waitElement = new WaitElement();
-        ProductPage productPage = new ProductPage();
-        BasketPage basketPage = new BasketPage();
+        logger.info("addRandomProductToBasket  start => " + Thread.currentThread().getName());
+        WaitElement waitElement = new WaitElement(remoteWebdriver);
+        ProductPage productPage = new ProductPage(remoteWebdriver);
+        BasketPage basketPage = new BasketPage(remoteWebdriver);
 
         waitElement.waitElementToBeClickable(productPage.addToBasketButton());
 
@@ -117,45 +128,53 @@ public class SearchTest extends WebDriverManager{
 
         assertTrue(readLineFromFile.contains(productBasketPrice));
 
+        logger.info("addRandomProductToBasket  end => " + Thread.currentThread().getName());
+
     }
 
     @Test
     @Order(4)
     public void increaseProductCount() throws InterruptedException {
-        WaitElement waitElement = new WaitElement();
+        logger.info("increaseProductCount  start => " + Thread.currentThread().getName());
+        WaitElement waitElement = new WaitElement(remoteWebdriver);
 
-        BasketPage basketPage = new BasketPage();
+        BasketPage basketPage = new BasketPage(remoteWebdriver);
 
         basketPage.selectCount("2");
 
         assertEquals("2",basketPage.productCount().getAttribute("value"));
         //assertTrue(basketPage.updatedProductCountInfoMsg().isDisplayed());
+        logger.info("increaseProductCount  end => " + Thread.currentThread().getName());
 
     }
 
     @Test
     @Order(5)
     public void cleanBasket() throws InterruptedException {
-        WaitElement waitElement = new WaitElement();
+        logger.info("cleanBasket  start => " + Thread.currentThread().getName());
+        WaitElement waitElement = new WaitElement(remoteWebdriver);
 
-        BasketPage basketPage = new BasketPage();
+        BasketPage basketPage = new BasketPage(remoteWebdriver);
 
         Thread.sleep(5000);
 
         basketPage.clickDeleteProductButton(basketPage.deleteButton());
 
-        Thread.sleep(2000);
+        Thread.sleep(5000);
 
-/*        String asciiInfoMsgElement = Normalizer.normalize(basketPage.emptyBasketInfoMessage().getText(), Normalizer.Form.NFD)
-                .replaceAll("[^\\p{ASCII}]", "");*/
+       String asciiInfoMsgElement = Normalizer.normalize(basketPage.emptyBasketInfoMessage().getText(), Normalizer.Form.NFD)
+                .replaceAll("[^\\p{ASCII}]", "");
+
+        assertEquals("Sepetinizde urun bulunmamaktadr.",asciiInfoMsgElement);
 
         assertTrue(basketPage.removedFromBasketMsg().isDisplayed());
+        logger.info("cleanBasket  end => " + Thread.currentThread().getName());
 
     }
 
     @AfterAll
-    public static void driverQuit(){
-       chromeWebdriverQuit();
+    public void driverQuit(){
+        chromeWebdriverQuit();
     }
 
 }

@@ -4,14 +4,21 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.*;
 
 import java.time.Duration;
 
-public class WaitElement extends WebDriverManager{
+public class WaitElement{
+
+    private RemoteWebDriver driver;
+
+    public WaitElement(RemoteWebDriver remoteWebdriver){
+        driver = remoteWebdriver;
+    }
 
     public void waitElementToVisible(WebElement element){
-        Wait<WebDriver> wait = new FluentWait<WebDriver>(remoteWebdriver.get())
+        Wait<WebDriver> wait = new FluentWait<WebDriver>(driver)
                 .withTimeout(Duration.ofSeconds(30))
                 .pollingEvery(Duration.ofMillis(60))
                 .ignoring(NoSuchElementException.class);
@@ -20,7 +27,7 @@ public class WaitElement extends WebDriverManager{
     }
 
     public void waitElementToBeClickable(WebElement element){
-        Wait<WebDriver> wait = new FluentWait<WebDriver>(remoteWebdriver.get())
+        Wait<WebDriver> wait = new FluentWait<WebDriver>(driver)
                 .withTimeout(Duration.ofSeconds(30))
                 .pollingEvery(Duration.ofMillis(60))
                 .ignoring(NoSuchElementException.class);
@@ -29,7 +36,7 @@ public class WaitElement extends WebDriverManager{
     }
 
     public void waitElementInvisibilty(WebElement element){
-        Wait<WebDriver> wait = new FluentWait<WebDriver>(remoteWebdriver.get())
+        Wait<WebDriver> wait = new FluentWait<WebDriver>(driver)
                 .withTimeout(Duration.ofSeconds(30))
                 .pollingEvery(Duration.ofMillis(60))
                 .ignoring(NoSuchElementException.class);
@@ -40,11 +47,11 @@ public class WaitElement extends WebDriverManager{
     public void waitForPageToLoad(long timeOutInSeconds) {
         ExpectedCondition<Boolean> expectation = new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver driver) {
-                return ((JavascriptExecutor) remoteWebdriver.get()).executeScript("return document.readyState").equals("complete");
+                return ((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete");
             }
         };
         try {
-            WebDriverWait wait = new WebDriverWait(remoteWebdriver.get(), Duration.ofSeconds(timeOutInSeconds));
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeOutInSeconds));
             wait.until(expectation);
         } catch (Throwable error) {
             error.printStackTrace();
@@ -56,6 +63,6 @@ public class WaitElement extends WebDriverManager{
     }
 
     public void implicitlyWait(int duration){
-       remoteWebdriver.get().manage().timeouts().implicitlyWait(Duration.ofSeconds(duration));
+       driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(duration));
     }
 }
